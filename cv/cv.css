@@ -48,7 +48,7 @@ body {
     margin: 0 auto 20px;
     border-radius: 50%;
     overflow: hidden;
-    border: 5px solid #fff;
+    border: 5px solid rgba(255,255,255,0.5);
 }
 
 .imgBx img {
@@ -111,12 +111,12 @@ body {
 hr {
     border: none;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgb(255, 255, 255,0.5);
     margin: 20px 0;
 }
 
 .right_Side hr {
-    background-color: #eee;
+    background-color: #fff;
 }
 
 .percent {
@@ -160,7 +160,7 @@ hr {
 }
 
 .about p {
-    color: rgba(0, 0, 0, 0.9);
+    color: rgba(0, 0, 0, 0.95);
     line-height: 1.5;
     font-size: 0.95em;
     text-align: left;
@@ -207,7 +207,7 @@ hr {
     margin-bottom: 8px;
 }
 .entry-description {
-    color: #555;
+    color: black;
     font-size: 0.95em;
     line-height: 1.5;
 }
