@@ -254,3 +254,7 @@ hr {
 a{
     color: #eee;
 }
+.stage{
+    font-size: smaller;
+    color: rgb(255, 255, 255,0.9);
+}
