@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Affichage des Détections</title>
+  <style>
+        body {
+        font-family: Arial, sans-serif;
+        display: block;
+      }
+      
+      table {
+        width: 70%;
+        margin: 20px auto;
+        border-collapse:collapse;
+      }
+      
+      table, th, td {
+        border: 1px solid #030303;
+      }
+      
+      th, td {
+        padding: 8px 12px;
+        text-align: center;
+      }
+      
+      th {
+        background-color: #f2f2f2;
+      }
+      
+      .alert {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 20px;
+      }
+      div{
+        background-color: aqua;
+        align-items: center;
+        width: 70%;
+        margin:auto auto;
+      }
+      footer{
+        width: 25%;
+        height: 25%;
+        align-items: center;
+        margin: 40px;
+      }
+      img,.png{
+        width: 30%;
+        height: 10%;
+        margin-top: 100%;
+      }
+      .png{
+        translate: 500px;
+      }
+  </style>
+</head>
+<body>
+    <div><h1 style="text-align: center;">Données de Détection</h1></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Angle (°)</th>
+        <th>Distance (cm)</th>
+        <th>Zone de détection</th>
+      </tr>
+    </thead>
+    <tbody id="detectionsTable">
+      <!-- Les données seront insérées ici -->
+    </tbody>
+  </table>
+
+  <div id="alertMessage" class="alert" style="display: none;">
+    <p>Un objet a été détecté à moins de 15 cm !</p>
+  </div>
+
+  <script >
+    // Remplace par l'IP de ton ESP8266
+    const ESP_IP = "192.168.137.82";  // L'adresse IP de ton ESP8266 sur le réseau local
+
+    // Fonction pour obtenir les détections de l'ESP8266
+    function fetchDetections() {
+      fetch(`http://${ESP_IP}/getDetections`)
+        .then(response => response.json())
+        .then(data => {
+          // Affichage des données dans le tableau
+          const tableBody = document.getElementById('detectionsTable');
+
+          // Parcours les données et crée une nouvelle ligne pour chaque détection
+          data.forEach(detection => {
+            // Créer une nouvelle ligne
+            const row = document.createElement('tr');
+      
+            // Créer les colonnes (cellules)
+            const angleCell = document.createElement('td');
+            angleCell.textContent = detection.angle;
+
+            const distanceCell = document.createElement('td');
+            distanceCell.textContent = detection.distance;
+
+            const zoneCell = document.createElement('td');
+            zoneCell.textContent = detection.zone;
+
+            // Ajouter les cellules à la ligne
+            row.appendChild(angleCell);
+            row.appendChild(distanceCell);
+            row.appendChild(zoneCell);
+
+            // Ajouter la ligne au tableau
+            table.appendChild(row);
+
+            // Si la distance est inférieure à 15 cm, changer la couleur de la ligne
+            if (detection.distance < 15) {
+              row.style.backgroundColor = 'red';  // Marquer la détection en rouge
+              document.getElementById('alertMessage').style.display = 'block'; // Afficher l'alerte
+            }
+
+            // Créer les cellules pour l'angle, la distance et la zone
+            row.innerHTML = `
+              <td>${detection.angle}</td>
+              <td>${detection.distance}</td>
+              <td>${detection.zone}</td>
+            `;
+            tableBody.appendChild(row);  // Ajouter la nouvelle ligne dans le tableau
+          });
+        })
+        .catch(error => console.error('Erreur lors de la récupération des données:', error));
+    }
+
+    // Mettre à jour les données toutes les 2 secondes
+    setInterval(fetchDetections, 1000);
+
+    // Appel initial pour afficher les données dès que la page est chargée
+    fetchDetections();
+  </script> <!-- Lien vers le fichier JavaScript -->
+</body>
+</html>
